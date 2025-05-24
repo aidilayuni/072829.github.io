@@ -1,79 +1,60 @@
 async function loadCovidData() {
   const url = "https://disease.sh/v3/covid-19/all";
-  const historicalUrl = "https://disease.sh/v3/covid-19/historical/all?lastdays=all";
-
-  const [currentRes, historicalRes] = await Promise.all([
-    fetch(url),
-    fetch(historicalUrl)
-  ]);
-  const data = await currentRes.json();
-  const historicalData = await historicalRes.json();
-
+  const res = await fetch(url);
+  const data = await res.json();
   const formatter = new Intl.NumberFormat('en-US');
 
-  document.getElementById("covid-output").innerHTML = `
-    <div class="bg-blue-700 p-6 rounded-xl shadow-lg text-center">
-      <h2 class="text-xl font-semibold mb-2">Total Cases</h2>
-      <p class="text-3xl font-bold">${formatter.format(data.cases)}</p>
-    </div>
-    <div class="bg-green-700 p-6 rounded-xl shadow-lg text-center">
-      <h2 class="text-xl font-semibold mb-2">Recovered</h2>
-      <p class="text-3xl font-bold">${formatter.format(data.recovered)}</p>
-    </div>
-    <div class="bg-red-700 p-6 rounded-xl shadow-lg text-center">
-      <h2 class="text-xl font-semibold mb-2">Deaths</h2>
-      <p class="text-3xl font-bold">${formatter.format(data.deaths)}</p>
-    </div>
-  `;
+  // Update summary cards
+  document.getElementById("cases-count").textContent = formatter.format(data.cases);
+  document.getElementById("recovered-count").textContent = formatter.format(data.recovered);
+  document.getElementById("deaths-count").textContent = formatter.format(data.deaths);
 
-  renderCovidChart(historicalData);
+  // Render donut chart
+  renderCovidDonutChart(data);
+
+  // Format and display last updated timestamp
+  const updatedDate = new Date(data.updated);
+  const formattedDate = updatedDate.toLocaleString('en-US', {
+    weekday: 'short',
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+  document.getElementById("last-updated").textContent = `Last updated: ${formattedDate}`;
 }
 
-function renderCovidChart(historical) {
-  const dates = Object.keys(historical.cases);
-  const cases = Object.values(historical.cases);
-  const deaths = Object.values(historical.deaths);
-
-  const ctx = document.getElementById('covidChart').getContext('2d');
+function renderCovidDonutChart(data) {
+  const ctx = document.getElementById('covidDonutChart').getContext('2d');
 
   new Chart(ctx, {
-    type: 'line',
+    type: 'doughnut',
     data: {
-      labels: dates,
-      datasets: [
-        {
-          label: 'New Cases',
-          data: cases,
-          borderColor: 'rgba(59, 130, 246, 1)',
-          backgroundColor: 'rgba(59, 130, 246, 0.1)',
-          fill: true,
-          tension: 0.3
-        },
-        {
-          label: 'Deaths',
-          data: deaths,
-          borderColor: 'rgba(220, 38, 38, 1)',
-          backgroundColor: 'rgba(220, 38, 38, 0.1)',
-          fill: true,
-          tension: 0.3
-        }
-      ]
+      labels: ['Cases', 'Recovered', 'Deaths'],
+      datasets: [{
+        data: [data.cases, data.recovered, data.deaths],
+        backgroundColor: [
+          'rgba(37, 99, 235, 0.7)',   // Blue
+          'rgba(22, 163, 74, 0.7)',   // Green
+          'rgba(220, 38, 38, 0.7)'    // Red
+        ],
+        borderColor: [
+          'rgba(37, 99, 235, 1)',
+          'rgba(22, 163, 74, 1)',
+          'rgba(220, 38, 38, 1)'
+        ],
+        borderWidth: 1
+      }]
     },
     options: {
       responsive: true,
       plugins: {
         legend: {
+          position: 'bottom',
           labels: {
-            color: '#fff'
+            color: '#1f2937'
           }
-        }
-      },
-      scales: {
-        x: {
-          ticks: { color: '#ccc' }
-        },
-        y: {
-          ticks: { color: '#ccc' }
         }
       }
     }

@@ -7,24 +7,38 @@
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script defer src="js/covid.js"></script>
-
-
 </head>
-<body class="bg-gray-900 text-white min-h-screen flex flex-col items-center justify-center p-6">
-  <h1 class="text-3xl font-bold mb-6 text-center">🌍 COVID-19 Global Statistics</h1>
-  
-  <div id="covid-output" class="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full max-w-4xl"></div>
+<body class="bg-[#f4ead8] text-gray-900 min-h-screen flex flex-col items-center px-4 py-8 font-sans">
 
-  <!-- Chart container -->
-<div class="w-full max-w-4xl my-10">
-  <canvas id="covidChart"></canvas>
-</div>
+  <h1 class="text-3xl font-bold text-center mb-6">🌍 COVID-19 Global Statistics</h1>
 
-  <!-- Back Button -->
-  <a href="index.html" class="mt-10 inline-block bg-gray-800 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded shadow">
+  <section aria-label="COVID stats summary" class="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full max-w-5xl mb-10">
+    <div id="card-cases" class="bg-blue-100 text-blue-900 p-6 rounded-xl shadow text-center">
+      <h2 class="text-lg font-semibold mb-1">Total Cases</h2>
+      <p class="text-2xl font-bold" id="cases-count">Loading...</p>
+    </div>
+    <div id="card-recovered" class="bg-green-100 text-green-900 p-6 rounded-xl shadow text-center">
+      <h2 class="text-lg font-semibold mb-1">Recovered</h2>
+      <p class="text-2xl font-bold" id="recovered-count">Loading...</p>
+    </div>
+    <div id="card-deaths" class="bg-red-100 text-red-900 p-6 rounded-xl shadow text-center">
+      <h2 class="text-lg font-semibold mb-1">Deaths</h2>
+      <p class="text-2xl font-bold" id="deaths-count">Loading...</p>
+    </div>
+  </section>
+
+ <section class="w-full max-w-md mt-10">
+  <canvas id="covidDonutChart" class="bg-white rounded-xl p-4 shadow"></canvas>
+</section>
+<p id="last-updated" class="mt-4 text-sm text-gray-500 italic text-center"></p>
+
+
+  <a href="index.html" class="mt-10 bg-gray-800 text-white px-5 py-2 rounded-lg shadow hover:bg-gray-700 transition">
     ← Back to Home
   </a>
 
-  <footer class="mt-6 text-sm text-gray-500">Data from <a href="https://disease.sh/" class="underline">disease.sh</a> API</footer>
+<p id="last-updated" class="mt-4 text-sm text-gray-500 italic"></p>
+
+  <footer class="mt-6 text-sm text-gray-600">Data from <a href="https://disease.sh/" class="underline text-blue-700">disease.sh</a> API</footer>
 </body>
 </html>
