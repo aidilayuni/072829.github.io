@@ -1,11 +1,17 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>COVID-19 Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <script defer src="js/covid.js"></script>
 </head>
-<body>
-  <h1>COVID-19 Global Statistics</h1>
-  <div id="covid-output"></div>
+<body class="bg-gray-900 text-white min-h-screen flex flex-col items-center justify-center p-6">
+  <h1 class="text-3xl font-bold mb-6 text-center">🌍 COVID-19 Global Statistics</h1>
+  
+  <div id="covid-output" class="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full max-w-4xl"></div>
+  
+  <footer class="mt-10 text-sm text-gray-500">Data from <a href="https://disease.sh/" class="underline">disease.sh</a> API</footer>
 </body>
 </html>
